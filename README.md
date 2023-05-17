@@ -42,7 +42,13 @@ Then navigate to the `/backend` folder and run the following command to install 
 yarn
 ```
 
-Run the following command to seed the database:
+Since we have added a custom entity to the server, we need to build the migration in order for it to be loaded during the seeding of the database. To do this run the following command to build the migration:
+
+```bash
+yarn build:server
+```
+
+We can now seed the database, to do so run the following command:
 
 ```bash
 yarn seed
