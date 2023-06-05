@@ -60,6 +60,7 @@ const OnboardingFlow = (props: ExtensionProps) => {
 
   const onStart = () => {
     updateServerState({ current_step: STEP_FLOW[0] });
+    navigate(`/a/products`);
   };
 
   const setStepComplete = (step_id: STEP_ID) => {
