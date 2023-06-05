@@ -14,3 +14,6 @@ coverage
 package-lock.json
 medusa-db.sql
 build
+
+.yarn
+.DS_Store

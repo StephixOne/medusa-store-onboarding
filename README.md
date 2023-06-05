@@ -67,24 +67,6 @@ You can then navigate to the admin dashboard at `http://localhost:9000/app` and 
 Email: `admin@medusa-test.com`
 Password: `supersecret`
 
-Next, navigate to the `/storefront` folder.
-
-Run the following command to install the dependencies:
-
-```bash
-yarn
-```
-
-Then, start the dev server:
-
-```bash
-yarn dev
-```
-
 ## Demo
 
-This demo shows how to create a custom admin widget for Medusa. It is a simple extension that adds a Restock Notification widget to the product detail page. The widget allows the admin to see the number of customers that have signed up for a restock notification for a sold out product variant.
-
-To see the widget in action, navigate to the admin dashboard and click on the "Products" tab in the sidebar. Then click on the "Medusa Coffee Mug" product. You should see the widget at the bottom of the page.
-
-Using the storefront, you can sign up for a restock notification by filling out an email and clicking on the "Subscribe" button. You can then see the number of customers that have signed up for a restock notification in the admin dashboard, after refreshing the product details page.
+The demo shows the onboarding widgets flow. More description TBA :D

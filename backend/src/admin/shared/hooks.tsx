@@ -1,20 +1,8 @@
 import { createCustomAdminHooks } from "medusa-react";
 
 const {
-  useAdminEntity,
-  useAdminEntities,
-  useAdminCreateMutation,
-  useAdminUpdateMutation,
-  useAdminDeleteMutation,
-} = createCustomAdminHooks(
-  "restock-notifications",
-  "admin_restock_notifications"
-);
+  useAdminEntity: useAdminOnboardingState,
+  useAdminUpdateMutation: useAdminUpdateOnboardingStateMutation,
+} = createCustomAdminHooks("onboarding", "onboarding_state");
 
-export {
-  useAdminEntity,
-  useAdminEntities,
-  useAdminCreateMutation,
-  useAdminUpdateMutation,
-  useAdminDeleteMutation,
-};
+export { useAdminOnboardingState, useAdminUpdateOnboardingStateMutation };
