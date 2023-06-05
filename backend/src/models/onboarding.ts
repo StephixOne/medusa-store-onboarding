@@ -1,4 +1,4 @@
-import { BaseEntity } from "@medusajs/utils";
+import { BaseEntity } from "@medusajs/medusa";
 import { Index, Column, Entity } from "typeorm";
 
 @Entity()
