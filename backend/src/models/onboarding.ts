@@ -12,4 +12,7 @@ export class OnboardingState extends BaseEntity {
 
   @Column()
   is_complete: boolean;
+
+  @Column()
+  product_id: string;
 }

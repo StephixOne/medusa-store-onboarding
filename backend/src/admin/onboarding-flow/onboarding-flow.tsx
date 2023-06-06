@@ -18,6 +18,7 @@ import {
   OnboardingStateRes,
   UpdateOnboardingStateInput,
 } from "../../types/onboarding";
+import { OnboardingState } from "../../models/onboarding";
 
 type STEP_ID =
   | "create_product"
@@ -28,6 +29,7 @@ type STEP_ID =
 export type StepContentProps = ExtensionProps & {
   onNext?: Function;
   isComplete?: boolean;
+  data?: OnboardingState;
 } & any;
 
 type Step = {
@@ -88,6 +90,7 @@ const OnboardingFlow = (props: ExtensionProps) => {
 
   const goToProductView = (product: any) => {
     setStepComplete("create_product");
+    updateServerState({ product_id: product.id });
     navigate(`/a/products/${product.id}`);
   };
 
@@ -171,7 +174,11 @@ const OnboardingFlow = (props: ExtensionProps) => {
                           Complete Setup
                         </Button>
                       ) : (
-                        <Button variant="secondary" size="small">
+                        <Button
+                          variant="secondary"
+                          size="small"
+                          onClick={() => onHide()}
+                        >
                           Cancel Setup
                         </Button>
                       )}
@@ -179,7 +186,11 @@ const OnboardingFlow = (props: ExtensionProps) => {
                         variant="nuclear"
                         size="small"
                         onClick={() => {
-                          updateServerState({ current_step: null });
+                          updateServerState({
+                            current_step: null,
+                            is_complete: null,
+                            product_id: null,
+                          });
                           navigate("/a/products");
                         }}
                       >
@@ -188,7 +199,11 @@ const OnboardingFlow = (props: ExtensionProps) => {
                     </>
                   ) : (
                     <>
-                      <Button variant="secondary" size="small">
+                      <Button
+                        variant="secondary"
+                        size="small"
+                        onClick={() => onHide()}
+                      >
                         Close
                       </Button>
                       <Button
@@ -257,6 +272,7 @@ const OnboardingFlow = (props: ExtensionProps) => {
                       <step.component
                         onNext={step.onNext}
                         isComplete={isComplete}
+                        data={data?.status}
                         {...props}
                       />
                     </div>
