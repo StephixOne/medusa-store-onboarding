@@ -1,4 +1,7 @@
 import React from "react";
+import IconBadge from "../../shared/icon-badge";
+import ComputerDesktopIcon from "../../shared/icons/computer-desktop-icon";
+import DollarSignIcon from "../../shared/icons/dollar-sign-icon";
 
 const OrderDetail = () => {
   return (
@@ -12,55 +15,54 @@ const OrderDetail = () => {
         Start developing with Medusa
       </h2>
       <p className="text-sm">
-        This startup guide was entirely written in <strong>widgets</strong>{" "}
-        located within your Medusa project. Edit the file to change the content
-        of this widget. Medusa is a completely customizable commerce solution.
-        We've curated some essential guides to kickstart your development with
-        Medusa.
+        Medusa is a completely customizable commerce solution. We've curated
+        some essential guides to kickstart your development with Medusa.
       </p>
       <div className="grid grid-cols-2 gap-4 mt-5 pb-5 mb-5 border-b border-gray-300 border-solid">
         <a href="#">
-          <div className="p-5 border border-grey-20 rounded-rounded flex">
-            <div></div>
+          <div
+            className="p-4 rounded-rounded flex flex-col bg-slate-50"
+            style={{
+              boxShadow:
+                "0px 0px 0px 1px rgba(17, 24, 28, 0.08), 0px 1px 2px -1px rgba(17, 24, 28, 0.08), 0px 2px 4px rgba(17, 24, 28, 0.04)",
+            }}
+          >
+            <div className="mb-base">
+              <IconBadge>
+                <DollarSignIcon />
+              </IconBadge>
+            </div>
             <div>
-              <p className="font-semibold">Install Plugins</p>
+              <p className="font-semibold text-gray-700">
+                Start Selling in 3 Steps
+              </p>
               <p className="text-xs">
-                Integrate payment providers, notification services, and more.
+                Go live with a backend, an admin,
+                <br /> and a storefront in three steps.
               </p>
             </div>
           </div>
         </a>
         <a href="#">
-          <div className="p-5 border border-grey-20 rounded-rounded flex">
-            <div></div>
-            <div>
-              <p className="font-semibold">Create Endpoints</p>
-              <p className="text-xs">
-                Add custom endpoints to Medusa's exposed APIs.
-              </p>
+          <div
+            className="p-4 rounded-rounded flex flex-col bg-slate-50"
+            style={{
+              boxShadow:
+                "0px 0px 0px 1px rgba(17, 24, 28, 0.08), 0px 1px 2px -1px rgba(17, 24, 28, 0.08), 0px 2px 4px rgba(17, 24, 28, 0.04)",
+            }}
+          >
+            <div className="mb-base">
+              <IconBadge>
+                <ComputerDesktopIcon />
+              </IconBadge>
             </div>
-          </div>
-        </a>
-        <a href="#">
-          <div className="p-5 border border-grey-20 rounded-rounded flex">
-            <div></div>
             <div>
-              <p className="font-semibold">Create Entities</p>
-              <p className="text-xs">
-                Add custom tables to the database and use them in your Medusa
-                project.
+              <p className="font-semibold text-gray-700">
+                Build a Custom Commerce Application
               </p>
-            </div>
-          </div>
-        </a>
-        <a href="#">
-          <div className="p-5 border border-grey-20 rounded-rounded flex">
-            <div></div>
-            <div>
-              <p className="font-semibold">Listen to Events</p>
               <p className="text-xs">
-                Perform asynchronous actions when an event occurs, such as when
-                an order is placed.
+                Learn how to build a marketplace, subscription-based
+                <br /> purchases, or your custom use-case.
               </p>
             </div>
           </div>
@@ -68,7 +70,11 @@ const OrderDetail = () => {
       </div>
       <div>
         You can find more useful guides in{" "}
-        <a href="#" className="text-blue-500">
+        <a
+          href="https://docs.medusajs.com/"
+          target="_blank"
+          className="text-blue-500 font-semibold"
+        >
           our documentation
         </a>
         .

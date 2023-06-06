@@ -2,13 +2,14 @@ import React from "react";
 import Button from "../../shared/button";
 import { useAdminCreateProduct } from "medusa-react";
 import { useAdminRegions } from "medusa-react";
+import { StepContentProps } from "../onboarding-flow";
 
 // Needed for sample product creation — not exported by anything importable here
 enum ProductStatus {
   PUBLISHED = "published",
 }
 
-const ProductsList = ({ onNext }: { onNext: (product: any) => void }) => {
+const ProductsList = ({ onNext, isComplete }: StepContentProps) => {
   const { mutate: createProduct, isLoading } = useAdminCreateProduct();
   const { regions } = useAdminRegions();
 
@@ -54,21 +55,23 @@ const ProductsList = ({ onNext }: { onNext: (product: any) => void }) => {
         If you're not ready to create a product, we can create a sample product
         for you.
       </p>
-      <div className="flex gap-2 mt-4">
-        <a href="/app/a/products?offset=0&limit=15&modal=new">
-          <Button variant="primary" size="small">
-            Create a product
+      {!isComplete && (
+        <div className="flex gap-2 mt-4">
+          <a href="/app/a/products?offset=0&limit=15&modal=new">
+            <Button variant="primary" size="small">
+              Create a product
+            </Button>
+          </a>
+          <Button
+            variant="secondary"
+            size="small"
+            onClick={() => createSampleProduct()}
+            loading={isLoading}
+          >
+            Create sample product
           </Button>
-        </a>
-        <Button
-          variant="secondary"
-          size="small"
-          onClick={() => createSampleProduct()}
-          loading={isLoading}
-        >
-          Create sample product
-        </Button>
-      </div>
+        </div>
+      )}
     </div>
   );
 };

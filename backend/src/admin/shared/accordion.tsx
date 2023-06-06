@@ -14,6 +14,7 @@ type AccordionItemProps = AccordionPrimitive.AccordionItemProps & {
   customTrigger?: React.ReactNode;
   complete?: boolean;
   active?: boolean;
+  triggerable?: boolean;
 };
 
 const Accordion: React.FC<
@@ -42,6 +43,7 @@ const Item: React.FC<AccordionItemProps> = ({
   customTrigger = undefined,
   forceMountContent = undefined,
   active,
+  triggerable,
   ...props
 }) => {
   const headerClass = clsx({
@@ -66,42 +68,39 @@ const Item: React.FC<AccordionItemProps> = ({
       )}
     >
       <AccordionPrimitive.Header className="px-1">
-        <AccordionPrimitive.Trigger className="w-full" asChild>
-          <div className="flex flex-col">
-            <div className="flex w-full items-center justify-between">
-              <div className="gap-x-2xsmall flex items-center">
-                <div className="w-[25px] h-[25px] mr-4 flex items-center justify-center">
-                  {complete ? (
-                    <CheckCircleFillIcon
-                      color={"rgb(37, 99, 235)"}
-                      size="25px"
-                    />
-                  ) : (
-                    <span
-                      className={clsx(
-                        "rounded-full block border-gray-500 w-[20px] h-[20px] ml-[2px] border-2 transition-all",
-                        {
-                          "border-dashed border-blue-500 outline-4 outline-blue-200 outline outline-offset-2":
-                            active,
-                        }
-                      )}
-                    />
-                  )}
-                </div>
-                <span className={headerClass}>
-                  {title}
-                  {required && <span className="text-rose-50">*</span>}
-                </span>
+        <div className="flex flex-col">
+          <div className="flex w-full items-center justify-between">
+            <div className="gap-x-2xsmall flex items-center">
+              <div className="w-[25px] h-[25px] mr-4 flex items-center justify-center">
+                {complete ? (
+                  <CheckCircleFillIcon color={"rgb(37, 99, 235)"} size="25px" />
+                ) : (
+                  <span
+                    className={clsx(
+                      "rounded-full block border-gray-500 w-[20px] h-[20px] ml-[2px] border-2 transition-all",
+                      {
+                        "border-dashed border-blue-500 outline-4 outline-blue-200 outline outline-offset-2":
+                          active,
+                      }
+                    )}
+                  />
+                )}
               </div>
-              {customTrigger || <MorphingTrigger />}
-            </div>
-            {subtitle && (
-              <span className="inter-small-regular text-grey-50 mt-1">
-                {subtitle}
+              <span className={headerClass}>
+                {title}
+                {required && <span className="text-rose-50">*</span>}
               </span>
-            )}
+            </div>
+            <AccordionPrimitive.Trigger>
+              {customTrigger || <MorphingTrigger />}
+            </AccordionPrimitive.Trigger>
           </div>
-        </AccordionPrimitive.Trigger>
+          {subtitle && (
+            <span className="inter-small-regular text-grey-50 mt-1">
+              {subtitle}
+            </span>
+          )}
+        </div>
       </AccordionPrimitive.Header>
       <AccordionPrimitive.Content
         forceMount={forceMountContent}

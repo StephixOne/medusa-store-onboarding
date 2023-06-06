@@ -25,10 +25,15 @@ type STEP_ID =
   | "create_order"
   | "setup_finished";
 
+export type StepContentProps = ExtensionProps & {
+  onNext?: Function;
+  isComplete?: boolean;
+} & any;
+
 type Step = {
   id: STEP_ID;
   title: string;
-  component: React.FC<ExtensionProps & any>;
+  component: React.FC<StepContentProps>;
   onNext?: Function;
 };
 
@@ -46,16 +51,27 @@ const OnboardingFlow = (props: ExtensionProps) => {
     OnboardingStateRes
   >("");
 
-  // TODO return nothing if we're done?
-  // if (!isLoading && data?.status?.is_complete) return null;
-
   const { navigate } = props;
 
   const currentStep: STEP_ID | undefined = data?.status
     ?.current_step as STEP_ID;
 
+  const [openStep, setOpenStep] = useState(currentStep);
+  const [completed, setCompleted] = useState(false);
+
+  useEffect(() => {
+    setOpenStep(currentStep);
+  }, [currentStep]);
+
+  if (
+    !isLoading &&
+    data?.status?.is_complete &&
+    !localStorage.getItem("override_onboarding_finish")
+  )
+    return null;
+
   const updateServerState = (payload: UpdateOnboardingStateInput) => {
-    mutate(payload, { onSuccess: data => console.log({ data }) });
+    mutate(payload);
   };
 
   const onStart = () => {
@@ -66,6 +82,8 @@ const OnboardingFlow = (props: ExtensionProps) => {
   const setStepComplete = (step_id: STEP_ID) => {
     const next = STEP_FLOW[STEP_FLOW.findIndex(step => step === step_id) + 1];
     updateServerState({ current_step: next });
+    // Also set local state in case we're reopening from "Next step" without changing the actual current step
+    setOpenStep(next);
   };
 
   const goToProductView = (product: any) => {
@@ -84,6 +102,10 @@ const OnboardingFlow = (props: ExtensionProps) => {
   };
 
   const onComplete = () => {
+    setCompleted(true);
+  };
+
+  const onHide = () => {
     updateServerState({ is_complete: true });
   };
 
@@ -121,74 +143,128 @@ const OnboardingFlow = (props: ExtensionProps) => {
       <Container>
         <Accordion
           type="single"
-          className="mt-3"
-          value={currentStep}
-          // onValueChange={onSectionOpen}
+          className="my-3"
+          value={openStep}
+          onValueChange={value => setOpenStep(value as STEP_ID)}
         >
-          <div className="flex pb-5 items-center">
-            <div className="mr-3">
+          <div className="flex items-center">
+            <div className="mr-5">
               <GetStartedIcon />
             </div>
-            <div>
-              <h1 className="font-semibold text-lg">Get started</h1>
-              <p>Learn the basics of Medusa by creating your first order.</p>
-            </div>
-            <div className="ml-auto flex items-start gap-2">
-              {!!currentStep ? (
-                <>
-                  {currentStep === STEP_FLOW[STEP_FLOW.length - 1] ? (
-                    <Button
-                      variant="primary"
-                      size="small"
-                      onClick={() => onComplete()}
-                    >
-                      Complete Setup
-                    </Button>
+            {!completed ? (
+              <>
+                <div>
+                  <h1 className="font-semibold text-lg">Get started</h1>
+                  <p>
+                    Learn the basics of Medusa by creating your first order.
+                  </p>
+                </div>
+                <div className="ml-auto flex items-start gap-2">
+                  {!!currentStep ? (
+                    <>
+                      {currentStep === STEP_FLOW[STEP_FLOW.length - 1] ? (
+                        <Button
+                          variant="primary"
+                          size="small"
+                          onClick={() => onComplete()}
+                        >
+                          Complete Setup
+                        </Button>
+                      ) : (
+                        <Button variant="secondary" size="small">
+                          Cancel Setup
+                        </Button>
+                      )}
+                      <Button
+                        variant="nuclear"
+                        size="small"
+                        onClick={() => {
+                          updateServerState({ current_step: null });
+                          navigate("/a/products");
+                        }}
+                      >
+                        Reset flow (DEV)
+                      </Button>
+                    </>
                   ) : (
-                    <Button variant="secondary" size="small">
-                      Cancel Setup
-                    </Button>
+                    <>
+                      <Button variant="secondary" size="small">
+                        Close
+                      </Button>
+                      <Button
+                        variant="primary"
+                        size="small"
+                        onClick={() => onStart()}
+                      >
+                        Begin setup
+                      </Button>
+                    </>
                   )}
+                </div>
+              </>
+            ) : (
+              <>
+                <div>
+                  <h1 className="font-semibold text-lg">
+                    Thank you for completing the setup guide!
+                  </h1>
+                  <p>
+                    This whole experience was built using our new{" "}
+                    <strong>widgets</strong> feature.
+                    <br /> You can find out more details and build your own by
+                    following{" "}
+                    <a
+                      href="https://docs.medusajs.com/"
+                      target="_blank"
+                      className="text-blue-500 font-semibold"
+                    >
+                      our guide
+                    </a>
+                    .
+                  </p>
+                </div>
+                <div className="ml-auto flex items-start gap-2">
                   <Button
-                    variant="nuclear"
+                    variant="secondary"
                     size="small"
-                    onClick={() => {
-                      updateServerState({ current_step: null });
-                      navigate("/a/products");
-                    }}
+                    onClick={() => onHide()}
                   >
-                    Reset flow (DEV)
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button variant="secondary" size="small">
                     Close
                   </Button>
-                  <Button
-                    variant="primary"
-                    size="small"
-                    onClick={() => onStart()}
-                  >
-                    Begin setup
-                  </Button>
-                </>
-              )}
-            </div>
+                </div>
+              </>
+            )}
           </div>
-          {Steps.map(step => (
-            <Accordion.Item
-              title={step.title}
-              value={step.id}
-              headingSize="medium"
-              active={currentStep === step.id}
-              complete={isStepComplete(step.id)}
-            >
-              <div className="py-3 px-11 text-gray-500">
-                <step.component onNext={step.onNext} {...props} />
-              </div>
-            </Accordion.Item>
-          ))}
+          {!completed && (
+            <div className="mt-5">
+              {Steps.map(step => {
+                const isComplete = isStepComplete(step.id);
+                const isCurrent = currentStep === step.id;
+                return (
+                  <Accordion.Item
+                    title={step.title}
+                    value={step.id}
+                    headingSize="medium"
+                    active={isCurrent}
+                    complete={isComplete}
+                    disabled={!isComplete && !isCurrent}
+                    {...(!isComplete &&
+                      !isCurrent && {
+                        customTrigger: <></>,
+                      })}
+                  >
+                    <div className="py-3 px-11 text-gray-500">
+                      <step.component
+                        onNext={step.onNext}
+                        isComplete={isComplete}
+                        {...props}
+                      />
+                    </div>
+                  </Accordion.Item>
+                );
+              })}
+            </div>
+          )}
         </Accordion>
       </Container>
     </>

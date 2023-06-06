@@ -47,7 +47,9 @@ const CodeSnippets = ({
           language={active.language}
         >
           {({ style, tokens, getLineProps, getTokenProps }) => (
-            <pre style={{ ...style, background: "transparent" }}>
+            <pre
+              style={{ ...style, background: "transparent", fontSize: "12px" }}
+            >
               {tokens.map((line, i) => (
                 <div key={i} {...getLineProps({ line })}>
                   {line.map((token, key) => (

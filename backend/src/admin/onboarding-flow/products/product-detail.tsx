@@ -1,8 +1,16 @@
 import React from "react";
+import { useParams } from "react-router-dom";
+import { useAdminPublishableApiKeys } from "medusa-react";
 import Button from "../../shared/button";
 import CodeSnippets from "../../shared/code-snippets";
 
 const ProductDetail = ({ onNext, ...props }) => {
+  const { publishable_api_keys: keys, isLoading } = useAdminPublishableApiKeys({
+    offset: 0,
+    limit: 1,
+  });
+  const api_key = keys?.[0]?.id || "pk_01H0PY648BTMEJR34ZDATXZTD9";
+  const { id } = useParams();
   return (
     <div>
       <p>On this page, you can view your product's details and edit them.</p>
@@ -11,25 +19,27 @@ const ProductDetail = ({ onNext, ...props }) => {
         of the following code snippets to try it out.
       </p>
       <div className="pt-4">
-        <CodeSnippets
-          snippets={[
-            {
-              label: "cURL",
-              language: "markdown",
-              code: `curl -L -X GET 'http://localhost:9000/store/products/${props?.undefined?.id}' \n -H 'x-publishable-key: pk_01H0PY648BTMEJR34ZDATXZTD9'`,
-            },
-            {
-              label: "Medusa JS Client",
-              language: "jsx",
-              code: `// To install the JS Client in your storefront project\n// yarn add @medusajs/medusa-js\nconst medusa = new Medusa({ publishableApiKey: ‘pk_01H0PY648BTMEJR34ZDATXZTD9’})\nmedusa.products.retrieve("${props?.undefined?.id}")\n.then(({ product }) => {\n  console.log(product.id);\n});`,
-            },
-            {
-              label: "Medusa React",
-              language: "tsx",
-              code: "// TODO: Write React example lol",
-            },
-          ]}
-        />
+        {!isLoading && (
+          <CodeSnippets
+            snippets={[
+              {
+                label: "cURL",
+                language: "markdown",
+                code: `curl 'http://localhost:9000/store/products/${id}' -H 'x-publishable-key: ${api_key}'`,
+              },
+              {
+                label: "Medusa JS Client",
+                language: "jsx",
+                code: `// To install the JS Client in your storefront project\n// yarn add @medusajs/medusa-js\n\nconst medusa = new Medusa({ publishableApiKey: '${api_key}'})\nmedusa.products.retrieve("${id}")\n.then(({ product }) => {\n  console.log(product.id)\n})`,
+              },
+              {
+                label: "Medusa React",
+                language: "tsx",
+                code: `// To install the React SDK in your storefront project\n// yarn add medusa-react\nimport { useAdminProduct } from "medusa-react"\n\nconst { product } = useAdminProduct('${id}')\nconsole.log(product.id)`,
+              },
+            ]}
+          />
+        )}
       </div>
       <div className="flex mt-base gap-2">
         <a href="#">

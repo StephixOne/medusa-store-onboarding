@@ -5,8 +5,9 @@ import { useAdminCreateDraftOrder } from "medusa-react";
 import { useAdminShippingOptions } from "medusa-react";
 import { useAdminRegions } from "medusa-react";
 import { useMedusa } from "medusa-react";
+import { StepContentProps } from "../onboarding-flow";
 
-const OrdersList = ({ onNext }) => {
+const OrdersList = ({ onNext, isComplete }: StepContentProps) => {
   const { products } = useAdminProducts();
   const { mutate: createDraftOrder } = useAdminCreateDraftOrder();
   const { client } = useMedusa();
@@ -63,10 +64,15 @@ const OrdersList = ({ onNext }) => {
         </p>
       </div>
       <div className="flex gap-2">
-        <Button variant="primary" size="small" onClick={() => createOrder()}>
-          Create a sample order
-        </Button>
-        <a href="#">
+        {!isComplete && (
+          <Button variant="primary" size="small" onClick={() => createOrder()}>
+            Create a sample order
+          </Button>
+        )}
+        <a
+          href="https://docs.medusajs.com/starters/nextjs-medusa-starter"
+          target="_blank"
+        >
           <Button variant="secondary" size="small">
             Install Next.js Starter Storefront
           </Button>
