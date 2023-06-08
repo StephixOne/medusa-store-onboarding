@@ -1,15 +1,15 @@
 import React from "react";
 import Button from "../../shared/button";
-import { useAdminProducts } from "medusa-react";
+import { useAdminProduct } from "medusa-react";
 import { useAdminCreateDraftOrder } from "medusa-react";
 import { useAdminShippingOptions } from "medusa-react";
 import { useAdminRegions } from "medusa-react";
 import { useMedusa } from "medusa-react";
 import { StepContentProps } from "../onboarding-flow";
 
-const OrdersList = ({ onNext, isComplete }: StepContentProps) => {
-  const { products } = useAdminProducts();
-  const { mutate: createDraftOrder } = useAdminCreateDraftOrder();
+const OrdersList = ({ onNext, isComplete, data }: StepContentProps) => {
+  const { product } = useAdminProduct(data.product_id);
+  const { mutate: createDraftOrder, isLoading } = useAdminCreateDraftOrder();
   const { client } = useMedusa();
 
   const { regions } = useAdminRegions();
@@ -18,7 +18,6 @@ const OrdersList = ({ onNext, isComplete }: StepContentProps) => {
   const createOrder = () => {
     // TODO: Maybe use a specific product instead of taking first one?
     // Issues could arise if first one doesn't have variant etc
-    const product = products[0];
     const variant = product.variants[0] ?? null;
 
     createDraftOrder(
@@ -65,7 +64,12 @@ const OrdersList = ({ onNext, isComplete }: StepContentProps) => {
       </div>
       <div className="flex gap-2">
         {!isComplete && (
-          <Button variant="primary" size="small" onClick={() => createOrder()}>
+          <Button
+            variant="primary"
+            size="small"
+            onClick={() => createOrder()}
+            loading={isLoading}
+          >
             Create a sample order
           </Button>
         )}

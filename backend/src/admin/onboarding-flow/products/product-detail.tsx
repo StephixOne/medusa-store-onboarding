@@ -24,17 +24,17 @@ const ProductDetail = ({ onNext, isComplete, data }: StepContentProps) => {
               {
                 label: "cURL",
                 language: "markdown",
-                code: `curl 'http://localhost:9000/store/products/${data?.product_id}' -H 'x-publishable-key: ${api_key}'`,
+                code: `curl -H 'x-publishable-key: ${api_key}' 'http://localhost:9000/store/products/${data?.product_id}'`,
               },
               {
                 label: "Medusa JS Client",
                 language: "jsx",
-                code: `// To install the JS Client in your storefront project\n// yarn add @medusajs/medusa-js\n\nconst medusa = new Medusa({ publishableApiKey: '${api_key}'})\nmedusa.products.retrieve("${data?.product_id}")\n.then(({ product }) => {\n  console.log(product.id)\n})`,
+                code: `// Install the JS Client in your storefront project: @medusajs/medusa-js\n\nimport Medusa from "@medusajs/medusa-js"\n\nconst medusa = new Medusa({ publishableApiKey: "${api_key}"})\nconst product = await medusa.products.retrieve("${data?.product_id}")\nconsole.log(product.id)`,
               },
               {
                 label: "Medusa React",
                 language: "tsx",
-                code: `// To install the React SDK in your storefront project\n// yarn add medusa-react\nimport { useProduct } from "medusa-react"\n\nconst { product } = useProduct('${data?.product_id}')\nconsole.log(product.id)`,
+                code: `// Install the React SDK and required dependencies in your storefront project:\n// medusa-react @tanstack/react-query @medusajs/medusa\n\nimport { useProduct } from "medusa-react"\n\nconst { product } = useProduct("${data?.product_id}")\nconsole.log(product.id)`,
               },
             ]}
           />

@@ -48,7 +48,7 @@ const ProductsList = ({ onNext, isComplete }: StepContentProps) => {
     <div>
       <p>
         Create a product and set its general details such as title and
-        description, its price, options, variants, images, and more. You’ll then
+        description, its price, options, variants, images, and more. You'll then
         use the product to create a sample order.
       </p>
       <p>
@@ -57,11 +57,6 @@ const ProductsList = ({ onNext, isComplete }: StepContentProps) => {
       </p>
       {!isComplete && (
         <div className="flex gap-2 mt-4">
-          <a href="/app/a/products?offset=0&limit=15&modal=new">
-            <Button variant="primary" size="small">
-              Create a product
-            </Button>
-          </a>
           <Button
             variant="secondary"
             size="small"

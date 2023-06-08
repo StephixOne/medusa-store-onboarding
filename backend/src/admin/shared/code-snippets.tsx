@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import clsx from "clsx";
+import copy from "copy-to-clipboard";
 import { Highlight, themes } from "prism-react-renderer";
+import ClipboardCopyIcon from "./icons/clipboard-copy-icon";
+import CheckCircleFillIcon from "./icons/check-circle-fill-icon";
 
 const CodeSnippets = ({
   snippets,
@@ -12,6 +15,16 @@ const CodeSnippets = ({
   }[];
 }) => {
   const [active, setActive] = useState(snippets[0]);
+  const [copied, setCopied] = useState(false);
+
+  const copyToClipboard = () => {
+    setCopied(true);
+    copy(active.code);
+    setTimeout(() => {
+      setCopied(false);
+    }, 3000);
+  };
+
   return (
     <div className="rounded-lg bg-stone-900">
       <div className="flex gap-2 rounded-t-lg border-b border-b-stone-600 bg-stone-800 px-6 py-4">
@@ -34,7 +47,17 @@ const CodeSnippets = ({
           </div>
         ))}
       </div>
-      <div className="p-6">
+      <div className="p-6 relative">
+        <div
+          className="absolute right-4 top-4 text-gray-600 hover:text-gray-400 cursor-pointer"
+          onClick={copyToClipboard}
+        >
+          {copied ? (
+            <CheckCircleFillIcon size="24px" />
+          ) : (
+            <ClipboardCopyIcon size="24px" />
+          )}
+        </div>
         <Highlight
           theme={{
             ...themes.palenight,
